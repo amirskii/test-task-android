@@ -1,4 +1,7 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 28
@@ -35,4 +38,13 @@ dependencies {
     // Lifecycle components
     implementation "android.arch.lifecycle:extensions:$life_versions"
     annotationProcessor "android.arch.lifecycle:compiler:$life_versions"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+kotlin {
+    experimental {
+        coroutines "enable"
+    }
+}
+repositories {
+    mavenCentral()
 }
