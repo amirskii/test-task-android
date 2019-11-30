@@ -73,7 +73,6 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
                 android:text="Click to Login"
-                android:onClick="@{(v) -> LoginViewModel.onClick(v)}"
                 android:textSize="18sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

@@ -6,20 +6,29 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.text.TextUtils
+import com.example.umangburman.databindingwithlivedata.Model.Status
 import com.example.umangburman.databindingwithlivedata.R
 import com.example.umangburman.databindingwithlivedata.ViewModel.LoginViewModel
 import com.example.umangburman.databindingwithlivedata.databinding.ActivityMainBinding
+import dagger.android.AndroidInjection
+import kotlinx.android.synthetic.main.activity_main.*
+import kz.kaspibusiness.factory.AppViewModelFactory
 import java.util.*
+import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
+    @Inject
+    lateinit var viewModelFactory: AppViewModelFactory
+
     val viewModel: LoginViewModel by lazy {
-        ViewModelProviders.of(this).get(LoginViewModel::class.java)
+        ViewModelProviders.of(this, viewModelFactory).get(LoginViewModel::class.java)
     }
 
     lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
 
         binding = DataBindingUtil.setContentView(this@MainActivity, R.layout.activity_main)
@@ -27,6 +36,10 @@ class MainActivity : AppCompatActivity() {
         binding.setLifecycleOwner(this)
 
         binding.loginViewModel = viewModel
+
+        btnLogin.setOnClickListener {
+            observeViewModel()
+        }
 
         viewModel.userLiveData.observe(this, Observer {
             it?.let { loginUser ->
@@ -49,5 +62,21 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+    }
+
+    private fun observeViewModel() {
+        viewModel.login("hello@karta.com", "12345678").observe(this, Observer { it?.let {
+            when(it.status) {
+                Status.SUCCESS -> {
+                    //hideLoadingLayout()
+                    if (it.data?.statusCode == 0) {
+                    } else {
+                        //textInputPassword.error = it.data?.message
+                    }
+                }
+                Status.ERROR -> {}//showError(it)
+                Status.LOADING -> {}// showLoadingLayout()
+            }
+        } })
     }
 }

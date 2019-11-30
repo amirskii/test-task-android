@@ -5,8 +5,11 @@ import android.arch.lifecycle.ViewModel
 import android.view.View
 
 import com.example.umangburman.databindingwithlivedata.Model.LoginUser
+import com.example.umangburman.databindingwithlivedata.repository.MyRepository
+import javax.inject.Inject
 
-class LoginViewModel : ViewModel() {
+class LoginViewModel @Inject
+constructor(private val repository: MyRepository): ViewModel() {
 
     var EmailAddress = MutableLiveData<String>()
     var Password = MutableLiveData<String>()
@@ -20,5 +23,7 @@ class LoginViewModel : ViewModel() {
         userLiveData.value = loginUser
 
     }
+
+    fun login(email: String, password: String) = repository.login(email, password)
 
 }
