@@ -4,17 +4,14 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.umangburman.databindingwithlivedata.Model.Status
 import com.example.umangburman.databindingwithlivedata.R
 import com.example.umangburman.databindingwithlivedata.ViewModel.LoginViewModel
-import com.example.umangburman.databindingwithlivedata.databinding.FragmentLoginBinding
 import com.example.umangburman.databindingwithlivedata.databinding.FragmentMainBinding
 import com.example.umangburman.databindingwithlivedata.factory.AppViewModelFactory
-import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.fragment_main.*
 import javax.inject.Inject
 
 
@@ -40,7 +37,16 @@ class MainFragment: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        btnLogout.setOnClickListener {
+            logout()
+        }
+
         observeViewModel()
+    }
+
+    private fun logout() {
+        viewModel.logout()
+        (activity as MainActivity).navigateLogin()
     }
 
     private fun observeViewModel() {

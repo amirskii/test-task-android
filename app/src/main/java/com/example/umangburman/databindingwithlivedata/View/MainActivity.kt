@@ -37,11 +37,15 @@ class MainActivity : DaggerAppCompatActivity() {
         binding.loginViewModel = viewModel
 
         if (viewModel.getSession().isEmpty())
-            showFragment(LoginFragment())
+            navigateLogin()
         else {
             viewModel.getUserInfo()
             navigateMain()
         }
+    }
+
+    fun navigateLogin() {
+        showFragment(LoginFragment())
     }
 
     fun navigateMain() {

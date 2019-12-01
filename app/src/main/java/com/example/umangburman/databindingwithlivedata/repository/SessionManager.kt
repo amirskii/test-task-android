@@ -26,9 +26,13 @@ class SessionManager(private val context: Context) {
 
     fun loadSession(token: String) {
         val jwt = JWT(token)
-        jwt.getClaim("session_id").asString()?.let {
-            this.sessionId = it
-            Log.d(TAG, "load session $sessionId expires at ${jwt.expiresAt}")
+        if (!jwt.isExpired(10)) {
+            jwt.getClaim("session_id").asString()?.let {
+                this.sessionId = it
+                Log.d(TAG, "load session $sessionId expires at ${jwt.expiresAt}")
+            }
+        } else {
+            Log.d(TAG, "session is expired!")
         }
     }
 
@@ -36,6 +40,15 @@ class SessionManager(private val context: Context) {
         loadSession(token)
         mPreferences.edit().putString("token", token).apply()
         mPreferences.edit().putString("userInfo", userInfo).apply()
+    }
+
+    fun deleteToken() {
+        val editor = mPreferences.edit()
+        editor.remove("token")
+        editor.remove("userInfo")
+        editor.commit()
+        sessionId = ""
+        userInfo = ""
     }
 
     companion object {

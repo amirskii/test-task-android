@@ -44,4 +44,6 @@ class MyRepository @Inject constructor(val service: ApiService, val sessionManag
     fun saveToken(token: String, userInfo: String) = sessionManager.saveToken(token, userInfo)
     fun getSession() = sessionManager.sessionId
     fun getUserInfo() = sessionManager.userInfo
+
+    fun deleteToken() = sessionManager.deleteToken()
 }

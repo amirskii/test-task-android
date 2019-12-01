@@ -32,4 +32,8 @@ constructor(private val repository: MyRepository): ViewModel() {
         setUser()
     }
 
+    fun logout() {
+        repository.deleteToken()
+    }
+
 }
