@@ -26,4 +26,6 @@ constructor(private val repository: MyRepository): ViewModel() {
 
     fun login(email: String, password: String) = repository.login(email, password)
 
+    fun saveToken(token: String) = repository.saveToken(token)
+
 }

@@ -1,8 +1,10 @@
 package com.example.umangburman.databindingwithlivedata.di
 
+import android.app.Application
 import com.example.umangburman.databindingwithlivedata.BuildConfig
 import com.example.umangburman.databindingwithlivedata.api.ApiService
 import com.example.umangburman.databindingwithlivedata.api.LiveDataCallAdapterFactory
+import com.example.umangburman.databindingwithlivedata.repository.SessionManager
 import dagger.Module
 import dagger.Provides
 import okhttp3.Interceptor
@@ -21,14 +23,14 @@ class AppModule {
     private val DEFAULT_TIME_OUT = 120L
     private val apiURL = "https://api.dev.karta.com"
 
-    inner class SessionIdInterceptor : Interceptor {
+    inner class SessionIdInterceptor(private val sessionManager: SessionManager) : Interceptor {
         @Throws(IOException::class)
         override fun intercept(chain: Interceptor.Chain): Response {
             val builder = chain.request().newBuilder()
-//            val sessionId = SessionManager.instance.sessionId
-//            if (sessionId != null) {
-//                builder.addHeader("X-Kb-Session-Id", sessionId)
-//            }
+            val sessionId = sessionManager.sessionId
+            if (!sessionId.isNullOrEmpty()) {
+                builder.addHeader("session_id", sessionId)
+            }
             return chain.proceed(builder.build())
         }
     }
@@ -47,9 +49,9 @@ class AppModule {
     @Provides
     @Singleton
     @Named("ApiService")
-    fun provideRetrofit(interceptor: HttpLoggingInterceptor): Retrofit {
+    fun provideRetrofit(interceptor: HttpLoggingInterceptor, sessionManager: SessionManager): Retrofit {
         val client = OkHttpClient().newBuilder()
-                .addInterceptor(SessionIdInterceptor())
+                .addInterceptor(SessionIdInterceptor(sessionManager))
                 .addInterceptor(interceptor)
                 .connectTimeout(DEFAULT_TIME_OUT, TimeUnit.SECONDS)
                 .readTimeout(DEFAULT_TIME_OUT, TimeUnit.SECONDS)
@@ -64,6 +66,11 @@ class AppModule {
                 .build()
     }
 
+    @Provides
+    @Singleton
+    fun provideSessionManager(application: Application): SessionManager {
+        return SessionManager(application.applicationContext)
+    }
 
     @Provides
     @Singleton

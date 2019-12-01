@@ -1,4 +1,4 @@
-package kz.kaspibusiness.di
+package com.example.umangburman.databindingwithlivedata.di
 
 import android.arch.lifecycle.ViewModel
 import dagger.MapKey

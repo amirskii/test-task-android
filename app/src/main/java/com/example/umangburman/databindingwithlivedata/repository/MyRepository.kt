@@ -2,7 +2,7 @@ package com.example.umangburman.databindingwithlivedata.repository
 
 import android.arch.lifecycle.LiveData
 import android.util.Log
-import com.example.umangburman.databindingwithlivedata.Model.BaseResponse
+import com.example.umangburman.databindingwithlivedata.Model.LoginResponse
 import com.example.umangburman.databindingwithlivedata.Model.Resource
 import com.example.umangburman.databindingwithlivedata.api.ApiResponse
 import com.example.umangburman.databindingwithlivedata.api.ApiService
@@ -12,7 +12,7 @@ import javax.inject.Singleton
 
 
 @Singleton
-class MyRepository @Inject constructor(val service: ApiService) {
+class MyRepository @Inject constructor(val service: ApiService, val sessionManager: SessionManager) {
 
 
     init {
@@ -36,10 +36,10 @@ class MyRepository @Inject constructor(val service: ApiService) {
 
     fun json2Body(json: String) = RequestBody.create(okhttp3.MediaType.parse("application/json; charset=utf-8"), json)
 
-    fun login(email: String, password: String): LiveData<Resource<BaseResponse>> {
+    fun login(email: String, password: String): LiveData<Resource<LoginResponse>> {
         val body = json2Body("{ \"email\": \"$email\", \"password\": \"$password\" }")
         return getNetworkData{ service.login(body) }
     }
 
-
+    fun saveToken(token: String) = sessionManager.saveToken(token)
 }
