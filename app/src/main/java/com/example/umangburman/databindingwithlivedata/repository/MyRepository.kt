@@ -41,5 +41,7 @@ class MyRepository @Inject constructor(val service: ApiService, val sessionManag
         return getNetworkData{ service.login(body) }
     }
 
-    fun saveToken(token: String) = sessionManager.saveToken(token)
+    fun saveToken(token: String, userInfo: String) = sessionManager.saveToken(token, userInfo)
+    fun getSession() = sessionManager.sessionId
+    fun getUserInfo() = sessionManager.userInfo
 }

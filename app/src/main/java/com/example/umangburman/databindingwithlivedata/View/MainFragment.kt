@@ -12,24 +12,25 @@ import com.example.umangburman.databindingwithlivedata.Model.Status
 import com.example.umangburman.databindingwithlivedata.R
 import com.example.umangburman.databindingwithlivedata.ViewModel.LoginViewModel
 import com.example.umangburman.databindingwithlivedata.databinding.FragmentLoginBinding
+import com.example.umangburman.databindingwithlivedata.databinding.FragmentMainBinding
 import com.example.umangburman.databindingwithlivedata.factory.AppViewModelFactory
 import kotlinx.android.synthetic.main.fragment_login.*
 import javax.inject.Inject
 
 
-class LoginFragment: BaseFragment() {
+class MainFragment: BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: AppViewModelFactory
 
-    lateinit var binding: FragmentLoginBinding
+    lateinit var binding: FragmentMainBinding
 
     val viewModel: LoginViewModel by lazy {
         ViewModelProviders.of(activity!!, viewModelFactory).get(LoginViewModel::class.java)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         binding.setLifecycleOwner(this)
         binding.loginViewModel = viewModel
 
@@ -39,33 +40,30 @@ class LoginFragment: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        setDefaults()
-        btnLogin.setOnClickListener {
-            observeViewModel()
-        }
-    }
-
-    private fun setDefaults() {
-        viewModel.emailAddress.value = "hello@karta.com"
-        viewModel.password.value = "12345678"
+        observeViewModel()
     }
 
     private fun observeViewModel() {
-        viewModel.login().observe(this, Observer { it?.let {
-            when(it.status) {
-                Status.SUCCESS -> {
-                    //hideLoadingLayout()
-                    it.data?.token?.let {
-                        viewModel.saveToken(it)
-                        viewModel.setUser()
-                        (activity as MainActivity).navigateMain()
-                        // jwt.getClaim("session_id").asString()?.let {
-                    }
-                }
-                Status.ERROR -> {}//showError(it)
-                Status.LOADING -> {}// showLoadingLayout()
+        viewModel.userLiveData.observe(this, Observer {
+            it?.let { loginUser ->
+                binding.lblEmailAnswer.text = loginUser.strEmailAddress
+                binding.lblPasswordAnswer.text = loginUser.strPassword
             }
-        } })
+        })
+
+//        viewModel.login("hello@karta.com", "12345678").observe(this, Observer { it?.let {
+//            when(it.status) {
+//                Status.SUCCESS -> {
+//                    //hideLoadingLayout()
+//                    it.data?.token?.let {
+//                        viewModel.saveToken(it)
+//                        // jwt.getClaim("session_id").asString()?.let {
+//                    }
+//                }
+//                Status.ERROR -> {}//showError(it)
+//                Status.LOADING -> {}// showLoadingLayout()
+//            }
+//        } })
     }
 
 

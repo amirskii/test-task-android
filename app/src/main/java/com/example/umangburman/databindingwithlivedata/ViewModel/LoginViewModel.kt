@@ -11,21 +11,25 @@ import javax.inject.Inject
 class LoginViewModel @Inject
 constructor(private val repository: MyRepository): ViewModel() {
 
-    var EmailAddress = MutableLiveData<String>()
-    var Password = MutableLiveData<String>()
+    var emailAddress = MutableLiveData<String>()
+    var password = MutableLiveData<String>()
 
     val userLiveData: MutableLiveData<LoginUser> = MutableLiveData()
 
-    fun onClick(view: View) {
-
-        val loginUser = LoginUser(EmailAddress.value, Password.value)
-
+    fun setUser() {
+        val loginUser = LoginUser(emailAddress.value, password.value)
         userLiveData.value = loginUser
-
     }
 
-    fun login(email: String, password: String) = repository.login(email, password)
+    fun login() = repository.login(emailAddress.value ?: "", password.value ?: "")
 
-    fun saveToken(token: String) = repository.saveToken(token)
+    fun saveToken(token: String) = repository.saveToken(token, emailAddress.value ?: "")
+
+    fun getSession() = repository.getSession()
+
+    fun getUserInfo() {
+        emailAddress.value = repository.getUserInfo()
+        setUser()
+    }
 
 }

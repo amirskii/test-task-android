@@ -10,14 +10,17 @@ import com.auth0.android.jwt.JWT
 class SessionManager(private val context: Context) {
     private val mPreferences: SharedPreferences
     var sessionId: String = ""
+    var userInfo: String = ""
 
     init {
         mPreferences = PreferenceManager.getDefaultSharedPreferences(this.context)
-        //sessionId = mPreferences.getString("sessionId", "")
 
         if (mPreferences.contains("token")) {
             val token = mPreferences.getString("token", "")
             loadSession(token)
+        }
+        if (mPreferences.contains("userInfo")) {
+            userInfo = mPreferences.getString("userInfo", "")
         }
     }
 
@@ -28,15 +31,11 @@ class SessionManager(private val context: Context) {
             Log.d(TAG, "load session $sessionId expires at ${jwt.expiresAt}")
         }
     }
-//
-//    fun saveSession(sessionId: String) {
-//        this.sessionId = sessionId
-//        mPreferences.edit().putString("sessionId", sessionId).apply()
-//    }
 
-    fun saveToken(token: String) {
+    fun saveToken(token: String, userInfo: String) {
         loadSession(token)
         mPreferences.edit().putString("token", token).apply()
+        mPreferences.edit().putString("userInfo", userInfo).apply()
     }
 
     companion object {
