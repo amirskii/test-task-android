@@ -1,15 +1,19 @@
 package com.example.umangburman.databindingwithlivedata.ViewModel
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
-import android.view.View
+import android.util.Log
 
 import com.example.umangburman.databindingwithlivedata.Model.LoginUser
+import com.example.umangburman.databindingwithlivedata.api.BlockchainService
+import com.example.umangburman.databindingwithlivedata.api.Subscribe
 import com.example.umangburman.databindingwithlivedata.repository.MyRepository
+import com.tinder.scarlet.WebSocket
 import javax.inject.Inject
 
 class LoginViewModel @Inject
-constructor(private val repository: MyRepository): ViewModel() {
+constructor(private val repository: MyRepository, private val blockchainService: BlockchainService): ViewModel() {
 
     var emailAddress = MutableLiveData<String>()
     var password = MutableLiveData<String>()
@@ -34,6 +38,20 @@ constructor(private val repository: MyRepository): ViewModel() {
 
     fun logout() {
         repository.deleteToken()
+    }
+
+    @SuppressLint("CheckResult")
+    fun startListen() {
+        blockchainService.observeWebSocketEvent()
+                .filter { it is WebSocket.Event.OnConnectionOpened<*> }
+                .subscribe({
+                    blockchainService.sendSubscribe(Subscribe())
+                })
+        blockchainService.observeTicker()
+                .subscribe({ ticker ->
+                    Log.d("111","Transaction amount is ${ticker.x.total } at ${ticker.x.datetime}")
+                })
+
     }
 
 }

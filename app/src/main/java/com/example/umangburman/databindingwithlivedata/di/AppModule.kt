@@ -3,8 +3,13 @@ package com.example.umangburman.databindingwithlivedata.di
 import android.app.Application
 import com.example.umangburman.databindingwithlivedata.BuildConfig
 import com.example.umangburman.databindingwithlivedata.api.ApiService
+import com.example.umangburman.databindingwithlivedata.api.BlockchainService
 import com.example.umangburman.databindingwithlivedata.api.LiveDataCallAdapterFactory
 import com.example.umangburman.databindingwithlivedata.repository.SessionManager
+import com.tinder.scarlet.Scarlet
+import com.tinder.scarlet.messageadapter.moshi.MoshiMessageAdapter
+import com.tinder.scarlet.streamadapter.rxjava2.RxJava2StreamAdapterFactory
+import com.tinder.scarlet.websocket.okhttp.newWebSocketFactory
 import dagger.Module
 import dagger.Provides
 import okhttp3.Interceptor
@@ -21,7 +26,11 @@ import javax.inject.Singleton
 @Module
 class AppModule {
     private val DEFAULT_TIME_OUT = 120L
+    private val DEFAULT_BASE_DURATION_IN_MS = 5000L
+    private val DEFAULT_MAX_DURATION_IN_MS = 5000L
     private val apiURL = "https://api.dev.karta.com"
+    private val baseUrl="wss://ws.blockchain.info/inv"
+
 
     inner class SessionIdInterceptor(private val sessionManager: SessionManager) : Interceptor {
         @Throws(IOException::class)
@@ -76,6 +85,25 @@ class AppModule {
     @Singleton
     fun provideApiService(@Named("ApiService") retrofit: Retrofit): ApiService {
         return retrofit.create(ApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient(interceptor: HttpLoggingInterceptor): OkHttpClient = OkHttpClient.Builder()
+            .addInterceptor(interceptor)
+            .connectTimeout(DEFAULT_TIME_OUT, TimeUnit.SECONDS)
+            .readTimeout(DEFAULT_TIME_OUT, TimeUnit.SECONDS)
+            .writeTimeout(DEFAULT_TIME_OUT, TimeUnit.SECONDS)
+            .build()
+
+    @Provides
+    fun provideGdaxService(client: OkHttpClient): BlockchainService {
+        val scarlet = Scarlet.Builder()
+                .webSocketFactory(client.newWebSocketFactory(baseUrl))
+                .addMessageAdapterFactory(MoshiMessageAdapter.Factory())
+                .addStreamAdapterFactory(RxJava2StreamAdapterFactory())
+                .build()
+        return scarlet.create()
     }
 
 }

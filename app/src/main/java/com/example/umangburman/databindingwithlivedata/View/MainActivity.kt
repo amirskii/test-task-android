@@ -36,7 +36,7 @@ class MainActivity : DaggerAppCompatActivity() {
 
         binding.loginViewModel = viewModel
 
-        if (viewModel.getSession().isEmpty())
+        if (viewModel.getSession().isNullOrEmpty())
             navigateLogin()
         else {
             viewModel.getUserInfo()

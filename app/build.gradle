@@ -52,6 +52,12 @@ dependencies {
     implementation "android.arch.lifecycle:extensions:$life_versions"
     annotationProcessor "android.arch.lifecycle:compiler:$life_versions"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    def scarlet = "0.1.8"
+    api "com.tinder.scarlet:stream-adapter-rxjava2:${scarlet}"
+    api "com.tinder.scarlet:message-adapter-moshi:${scarlet}"
+    implementation 'com.tinder.scarlet:scarlet:0.1.8'
+    implementation "com.tinder.scarlet:websocket-okhttp:0.1.8"
 }
 kotlin {
     experimental {

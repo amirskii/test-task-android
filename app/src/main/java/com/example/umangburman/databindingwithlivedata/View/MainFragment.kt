@@ -56,6 +56,7 @@ class MainFragment: BaseFragment() {
                 binding.lblPasswordAnswer.text = loginUser.strPassword
             }
         })
+        viewModel.startListen()
 
 //        viewModel.login("hello@karta.com", "12345678").observe(this, Observer { it?.let {
 //            when(it.status) {
