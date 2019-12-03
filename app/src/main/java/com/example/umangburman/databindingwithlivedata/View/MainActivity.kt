@@ -1,11 +1,9 @@
 package com.example.umangburman.databindingwithlivedata.View
 
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import com.example.umangburman.databindingwithlivedata.Model.Status
 import com.example.umangburman.databindingwithlivedata.R
 import com.example.umangburman.databindingwithlivedata.ViewModel.LoginViewModel
 import com.example.umangburman.databindingwithlivedata.databinding.ActivityMainBinding
@@ -39,7 +37,6 @@ class MainActivity : DaggerAppCompatActivity() {
         if (viewModel.getSession().isNullOrEmpty())
             navigateLogin()
         else {
-            viewModel.getUserInfo()
             navigateMain()
         }
     }

@@ -3,6 +3,7 @@ package com.example.umangburman.databindingwithlivedata.di
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProvider
 import com.example.umangburman.databindingwithlivedata.ViewModel.LoginViewModel
+import com.example.umangburman.databindingwithlivedata.ViewModel.MainViewModel
 import com.example.umangburman.databindingwithlivedata.factory.AppViewModelFactory
 import dagger.Binds
 import dagger.Module
@@ -15,6 +16,10 @@ internal abstract class ViewModelModule {
     @ViewModelKey(LoginViewModel::class)
     internal abstract fun bindLoginViewModel(vm: LoginViewModel): ViewModel
 
+    @Binds
+    @IntoMap
+    @ViewModelKey(MainViewModel::class)
+    internal abstract fun bindMainViewModel(vm: MainViewModel): ViewModel
 
     @Binds
     internal abstract fun bindViewModelFactory(appViewModelFactory: AppViewModelFactory): ViewModelProvider.Factory

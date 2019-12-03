@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.umangburman.databindingwithlivedata.R
-import com.example.umangburman.databindingwithlivedata.ViewModel.LoginViewModel
+import com.example.umangburman.databindingwithlivedata.ViewModel.MainViewModel
 import com.example.umangburman.databindingwithlivedata.databinding.FragmentMainBinding
 import com.example.umangburman.databindingwithlivedata.factory.AppViewModelFactory
 import kotlinx.android.synthetic.main.fragment_main.*
@@ -23,8 +23,8 @@ class MainFragment: BaseFragment() {
 
     lateinit var binding: FragmentMainBinding
 
-    val viewModel: LoginViewModel by lazy {
-        ViewModelProviders.of(activity!!, viewModelFactory).get(LoginViewModel::class.java)
+    val viewModel: MainViewModel by lazy {
+        ViewModelProviders.of(this, viewModelFactory).get(MainViewModel::class.java)
     }
 
     private val adapter by lazy { TransactionAdapter() }
@@ -32,7 +32,7 @@ class MainFragment: BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         binding.setLifecycleOwner(this)
-        binding.loginViewModel = viewModel
+        binding.viewModel = viewModel
 
         val view = binding.root
         return view
@@ -48,13 +48,13 @@ class MainFragment: BaseFragment() {
         }
 
         btnStart.setOnClickListener {
-            viewModel.startListen()
+            viewModel.startListening()
         }
 
         btnStop.setOnClickListener {
             viewModel.stopListening()
         }
-
+        viewModel.getUserInfo()
         observeViewModel()
     }
 
@@ -68,7 +68,7 @@ class MainFragment: BaseFragment() {
             it?.let { loginUser ->
                 binding.lblEmailAnswer.text = loginUser.strEmailAddress
                 binding.lblPasswordAnswer.text = loginUser.strPassword
-                viewModel.startListen()
+                viewModel.startListening()
             }
         })
         viewModel.transactionData.observe(this, Observer {
@@ -81,24 +81,6 @@ class MainFragment: BaseFragment() {
                 lblSumValue.text = sum.toString()
             }
         })
-
-
-
-        //
-
-//        viewModel.login("hello@karta.com", "12345678").observe(this, Observer { it?.let {
-//            when(it.status) {
-//                Status.SUCCESS -> {
-//                    //hideLoadingLayout()
-//                    it.data?.token?.let {
-//                        viewModel.saveToken(it)
-//                        // jwt.getClaim("session_id").asString()?.let {
-//                    }
-//                }
-//                Status.ERROR -> {}//showError(it)
-//                Status.LOADING -> {}// showLoadingLayout()
-//            }
-//        } })
     }
 
 
