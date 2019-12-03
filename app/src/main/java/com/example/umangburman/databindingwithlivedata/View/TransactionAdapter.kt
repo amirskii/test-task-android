@@ -45,5 +45,10 @@ class TransactionAdapter internal constructor() : RecyclerView.Adapter<Transacti
         mValues.add(newValue)
         notifyItemInserted(mValues.size - 1)
     }
+
+    fun clear() {
+        mValues.clear()
+        notifyDataSetChanged()
+    }
 }
 

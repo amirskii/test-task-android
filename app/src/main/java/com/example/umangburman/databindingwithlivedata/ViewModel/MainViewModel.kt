@@ -1,6 +1,5 @@
 package com.example.umangburman.databindingwithlivedata.ViewModel
 
-import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.util.Log
@@ -36,6 +35,7 @@ constructor(private val repository: MyRepository,
     }
 
     fun getUserInfo() {
+        repository.getSession()
         emailAddress.value = repository.getUserInfo()
         setUser()
     }
@@ -44,11 +44,7 @@ constructor(private val repository: MyRepository,
         repository.deleteToken()
     }
 
-    @SuppressLint("CheckResult")
     fun startListening() {
-        sum = 0
-        sumData.postValue(sum)
-
         compositeDisposable.addAll(Flowables.combineLatest(
                 Flowable.interval(UPDATE_INTERVAL_SECONDS, TimeUnit.SECONDS),
                 blockchainRepository.getTransactionObservable()
@@ -63,14 +59,18 @@ constructor(private val repository: MyRepository,
     }
 
     fun showTransaction(unconfirmed: Unconfirmed) {
-        sum += unconfirmed.x.total
-        sumData.postValue(sum)
+        setSummary(sum + unconfirmed.x.total)
         transactionData.postValue(Transaction(unconfirmed.x.datetime.toString(), unconfirmed.x.total))
         Log.d("111","Transaction amount is ${unconfirmed.x.total } at ${unconfirmed.x.datetime}")
     }
 
     fun stopListening() {
         compositeDisposable.clear()
+    }
+
+    fun setSummary(newSum: Long) {
+        sum = newSum
+        sumData.postValue(sum)
     }
 
     override fun onCleared() {

@@ -54,6 +54,11 @@ class MainFragment: BaseFragment() {
         btnStop.setOnClickListener {
             viewModel.stopListening()
         }
+
+        btnReset.setOnClickListener {
+            resetData()
+        }
+
         viewModel.getUserInfo()
         observeViewModel()
     }
@@ -83,5 +88,9 @@ class MainFragment: BaseFragment() {
         })
     }
 
+    private fun resetData() {
+        adapter.clear()
+        viewModel.setSummary(0L)
+    }
 
 }
