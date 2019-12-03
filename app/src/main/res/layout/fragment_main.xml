@@ -6,7 +6,7 @@
     <data>
         <variable
             name="viewModel"
-            type="com.example.umangburman.databindingwithlivedata.ViewModel.MainViewModel" />
+            type="com.example.amirskii.wsatlanttest.ViewModel.MainViewModel" />
     </data>
 
     <android.support.constraint.ConstraintLayout
