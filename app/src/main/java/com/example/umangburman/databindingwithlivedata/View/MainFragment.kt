@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -26,6 +27,8 @@ class MainFragment: BaseFragment() {
         ViewModelProviders.of(activity!!, viewModelFactory).get(LoginViewModel::class.java)
     }
 
+    private val adapter by lazy { TransactionAdapter() }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_main, container, false)
         binding.setLifecycleOwner(this)
@@ -37,8 +40,19 @@ class MainFragment: BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        transactionsRv.layoutManager = LinearLayoutManager(context)
+        transactionsRv.adapter = adapter
+
         btnLogout.setOnClickListener {
             logout()
+        }
+
+        btnStart.setOnClickListener {
+            viewModel.startListen()
+        }
+
+        btnStop.setOnClickListener {
+            viewModel.stopListening()
         }
 
         observeViewModel()
@@ -54,9 +68,23 @@ class MainFragment: BaseFragment() {
             it?.let { loginUser ->
                 binding.lblEmailAnswer.text = loginUser.strEmailAddress
                 binding.lblPasswordAnswer.text = loginUser.strPassword
+                viewModel.startListen()
             }
         })
-        viewModel.startListen()
+        viewModel.transactionData.observe(this, Observer {
+            it?.let {
+                adapter.add(it)
+            }
+        })
+        viewModel.sumData.observe(this, Observer {
+            it?.let { sum ->
+                lblSumValue.text = sum.toString()
+            }
+        })
+
+
+
+        //
 
 //        viewModel.login("hello@karta.com", "12345678").observe(this, Observer { it?.let {
 //            when(it.status) {

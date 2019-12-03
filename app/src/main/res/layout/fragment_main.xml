@@ -15,22 +15,6 @@
         tools:context=".View.MainActivity">
 
         <TextView
-            android:id="@+id/lblTitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:lineSpacingExtra="8sp"
-            android:text="Login Example Using MVVM, DataBinding with LiveData"
-            android:textAlignment="center"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
             android:id="@+id/lblTagline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -43,7 +27,7 @@
             android:textSize="16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/lblTitle" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/lblEmailAnswer"
@@ -78,15 +62,83 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="16dp"
             android:layout_marginEnd="32dp"
-            android:layout_marginBottom="444dp"
             android:text="Logout"
             android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/lblPasswordAnswer" />
+
+        <TextView
+            android:id="@+id/lblSumTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="Summary"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnLogout" />
+
+        <TextView
+            android:id="@+id/lblSumValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="Summary"
+            android:textColor="@android:color/holo_blue_light"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/lblSumTitle" />
+
+        <Button
+            android:id="@+id/btnStart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Start"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/btnStop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/lblSumTitle" />
+
+        <Button
+            android:id="@+id/btnStop"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Stop"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toStartOf="@+id/btnReset"
+            app:layout_constraintStart_toEndOf="@+id/btnStart"
+            app:layout_constraintTop_toBottomOf="@+id/lblSumTitle" />
+
+        <Button
+            android:id="@+id/btnReset"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:text="Reset"
+            android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnStop"
+            app:layout_constraintTop_toBottomOf="@+id/lblSumTitle" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/transactionsRv"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="16dp"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnStart"
+            tools:listitem="@layout/layout_transaction_item" />
 
     </android.support.constraint.ConstraintLayout>
 

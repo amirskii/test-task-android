@@ -14,7 +14,7 @@ interface BlockchainService {
     @Send
     fun sendSubscribe(subscribe: Subscribe)
     @Receive
-    fun observeTicker(): Flowable<Ticker>
+    fun observeTicker(): Flowable<Unconfirmed>
 }
 
 
@@ -22,7 +22,7 @@ data class Subscribe(
     val op: String = "unconfirmed_sub"
 )
 
-data class Ticker(
+data class Unconfirmed(
         val op: String,
         val x: XData
 )
